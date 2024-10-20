@@ -6,8 +6,10 @@ export const AppRoutes = {
     NOTICES: '/notices',
     NOTICE: '/notice/:id',
     NEW_NOTICE: '/new/notice',
-    SETTINGS: 'settings',
+    SETTINGS: '/settings',
     HISTORY: '/history',
+    CHATS: '/chats',
+    CHAT: '/chat/:id',
     ERROR_PAGE: '/error',
 
     ROOT: '/'
