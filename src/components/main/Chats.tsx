@@ -1,13 +1,14 @@
 import Header from "../../utilities/Header";
 
-function Settings(){
+function Chats(){
 
     return(
         <div>
             <Header />
-            <h1>Settings</h1>
+            <h1>Chats</h1>
         </div>
+        
     );
 }
 
-export default Settings;
+export default Chats;
