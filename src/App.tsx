@@ -8,6 +8,8 @@ import History from './components/main/History';
 import Settings from './components/main/Settings';
 import Login from './components/authentication/Login';
 import Registration from './components/authentication/Registration';
+import Chat from './components/main/Chat';
+import Chats from './components/main/Chats';
 
 function App() {
 
@@ -22,6 +24,8 @@ function App() {
         <Route path={AppRoutes.NOTICES} element={<Notices />} />
         <Route path={AppRoutes.NEW_NOTICE} element={<NewNotice />} />
         <Route path={AppRoutes.NOTICE} element={<Notice />} />
+        <Route path={AppRoutes.CHATS} element={<Chats />} />
+        <Route path={AppRoutes.CHAT} element={<Chat />} />
         <Route path={AppRoutes.HISTORY} element={<History />} />
         <Route path={AppRoutes.SETTINGS} element={<Settings />} />
         <Route path={AppRoutes.LOG_IN} element={<Login />} />
