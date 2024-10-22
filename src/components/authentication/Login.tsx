@@ -46,7 +46,7 @@ function Login(){
 
     return(
         <div className="min-w-full min-h-full flex justify-center items-center">
-            <div>
+            <div className="flex flex-col">
                 <h1>Welcome to booky</h1>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="email">Email</label>
@@ -60,6 +60,9 @@ function Login(){
                         <button className="authentication-button" type="submit">Login</button>
                     </div>
                 </form>
+                {error && (
+                            <span className="error-message">{error}</span>
+                        )}
                 <span>Don't have an accout yet?</span>
                 <Link to={AppRoutes.SIGN_UP} className="no-underline text-[hsl(272,76%,52%)]">Sign up</Link>
             </div>

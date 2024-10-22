@@ -10,6 +10,8 @@ import Login from './components/authentication/Login';
 import Registration from './components/authentication/Registration';
 import Chat from './components/main/Chat';
 import Chats from './components/main/Chats';
+import ErrorPage from './utilities/ErrorPage';
+import Comments from './utilities/Comments';
 
 function App() {
 
@@ -30,6 +32,8 @@ function App() {
         <Route path={AppRoutes.SETTINGS} element={<Settings />} />
         <Route path={AppRoutes.LOG_IN} element={<Login />} />
         <Route path={AppRoutes.SIGN_UP} element={<Registration />} />
+        <Route path={AppRoutes.COMMENTS} element={<Comments />} />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   )

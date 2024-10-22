@@ -14,7 +14,6 @@ interface Credentials{
 
 enum ErrorType {
     NoError = "no_error",
-    UsernameTaken = "username_is_already_taken",
     EmailRegistered = "this_email_is_already_registered",
     TooWeakPassword = "password_too_week",
     PasswordNotMatch = "password_do_not_match",
@@ -123,27 +122,39 @@ function Registration(){
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="email">Email</label>
                     <br></br>
-                    <input type="email" name="email" value={credentials.email} onChange={handleInputChange} className="border solid"></input>
+                    <input type="email" name="email" value={credentials.email} onChange={handleInputChange} required className="border solid"></input>
                     <br></br>
                     <label htmlFor="firstName">Firstname</label>
                     <br></br>
-                    <input type="text" name="firstName" value={credentials.firstName} onChange={handleInputChange} className="border solid"></input>
+                    <input type="text" name="firstName" value={credentials.firstName} onChange={handleInputChange} required className="border solid"></input>
                     <br></br>
                     <label htmlFor="lastName">Lastname</label>
                     <br></br>
-                    <input type="text" name="lastName" value={credentials.lastName} onChange={handleInputChange} className="border solid"></input>
+                    <input type="text" name="lastName" value={credentials.lastName} onChange={handleInputChange} required className="border solid"></input>
                     <br></br>
                     <label htmlFor="birthday">birthday</label>
                     <br></br>
-                    <input type="date" name="birthday" value={credentials.birthday} onChange={handleInputChange} className="border solid"></input>
+                    <input type="date" name="birthday" value={credentials.birthday} onChange={handleInputChange} required className="border solid"></input>
                     <br></br>
                     <label htmlFor="password">Password</label>
                     <br></br>
-                    <input type="password" name="password" value={credentials.password} onChange={handlePasswordChange} className="border solid"></input>
+                    <input type="password" name="password" value={credentials.password} onChange={handlePasswordChange} required className="border solid"></input>
+                    {error.errorType === ErrorType.TooWeakPassword && (
+                            <>
+                                <br />
+                                <span className="error-message">Password is too weak</span>
+                            </>
+                        )}
                     <br></br>
                     <label htmlFor="confirmPassword">Confirm password</label>
                     <br></br>
-                    <input type="password" name="confirmPassword" value={credentials.confirmPassword} onChange={handleConfirmPasswordChange} className="border solid"></input>
+                    <input type="password" name="confirmPassword" value={credentials.confirmPassword} onChange={handleConfirmPasswordChange} required className="border solid"></input>
+                    {error.errorType === ErrorType.PasswordNotMatch && (
+                            <>
+                                <br />
+                                <span className="error-message">Passwords do not match</span>
+                            </>
+                        )}
                     <div className="child">
                             <button type="submit" className="border solid">Sign Up</button>
                         </div>
