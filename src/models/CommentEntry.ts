@@ -1,9 +1,9 @@
-export interface Comment{
+export interface CommentEntry{
     id: string,
     userId: string,
     noticeId: string,
     timeSent: Date,
     content: string,
     commentId: string,
-    replies: Comment[]
+    replies: CommentEntry[]
 }
