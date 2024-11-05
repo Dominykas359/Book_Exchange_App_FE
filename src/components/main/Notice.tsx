@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AppRoutes } from "../../utilities/Routes";
 import { deleteBook, updateBook } from "../../api/BookApi";
 import { deleteComic, updateComic } from "../../api/ComicApi";
@@ -271,8 +271,9 @@ function Notice() {
                 )}
             </div>
             <div>
-                <button onClick={handleUpdate}>Save Changes</button>
                 <button onClick={handleDelete}>Delete</button>
+                <Link to={AppRoutes.NOTICES}>Cancel</Link>
+                <button onClick={handleUpdate}>Save Changes</button>
             </div>
         </div>
     );
