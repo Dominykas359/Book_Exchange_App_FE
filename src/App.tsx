@@ -11,7 +11,7 @@ import Registration from './components/authentication/Registration';
 import Chat from './components/main/Chat';
 import Chats from './components/main/Chats';
 import ErrorPage from './utilities/ErrorPage';
-import Comments from './utilities/Comments';
+import Comments from './components/main/Comments';
 
 function App() {
 
