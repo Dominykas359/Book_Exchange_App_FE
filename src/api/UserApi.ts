@@ -9,3 +9,10 @@ export const fetchUserById = async (id: string): Promise<User> => {
 
     return response.data;
 }
+
+export const fetchUserByEmail = async (email: string): Promise<User> => {
+
+    const response = await axios.get<User>(`http://localhost:8080/auth/check-email/${email}`);
+
+    return response.data;
+}
