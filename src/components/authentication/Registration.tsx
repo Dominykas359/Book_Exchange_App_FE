@@ -1,166 +1,170 @@
+import React, { useState } from "react";
 import axios from "axios";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppRoutes } from "../../utilities/Routes";
-import { Link, useNavigate } from "react-router-dom";
+import { ErrorType } from "../../utilities/validations/ErrorType";
+import { validatePasswords } from "../../utilities/validations/PasswordValidation";
+import { fetchUserByEmail } from "../../api/UserApi";
 
-interface Credentials{
-    email: string,
-    password: string,
-    confirmPassword: string,
-    firstName: string,
-    lastName: string,
-    birthday: string
-}
-
-enum ErrorType {
-    NoError = "no_error",
-    EmailRegistered = "this_email_is_already_registered",
-    TooWeakPassword = "password_too_week",
-    PasswordNotMatch = "password_do_not_match",
-    Other = "other"
+interface Credentials {
+    email: string;
+    password: string;
+    confirmPassword: string;
+    firstName: string;
+    lastName: string;
+    birthday: string;
 }
 
 interface Err {
-    message: String,
-    errorType: ErrorType
+    message: string;
+    errorType: ErrorType;
 }
 
-function Registration(){
-
+function Registration() {
     const navigate = useNavigate();
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const[credentials, setCredentials] = useState<Credentials>({
-        email: '',
-        password: '',
-        confirmPassword: '',
-        firstName: '',
-        lastName: '',
-        birthday: new Date().toISOString().split('T')[0]
+    const [credentials, setCredentials] = useState<Credentials>({
+        email: "",
+        password: "",
+        confirmPassword: "",
+        firstName: "",
+        lastName: "",
+        birthday: new Date().toISOString().split("T")[0],
     });
     const [error, setError] = useState<Err>({
-        message: '',
-        errorType: ErrorType.NoError 
+        message: "",
+        errorType: ErrorType.NoError,
     });
+    const [emailError, setEmailError] = useState<Err>({
+        message: "",
+        errorType: ErrorType.NoError
+    })
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setCredentials(prevCredentials => ({
+        setCredentials((prevCredentials) => ({
             ...prevCredentials,
-            [name]: value
+            [name]: value,
         }));
     };
+
     const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleInputChange(event);
-        validatePasswords(event.target.value, credentials.confirmPassword);
+        const validationError = validatePasswords(event.target.value, credentials.confirmPassword);
+        setError({ message: "", errorType: validationError });
     };
 
     const handleConfirmPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         handleInputChange(event);
-        validatePasswords(credentials.password, event.target.value);
+        const validationError = validatePasswords(credentials.password, event.target.value);
+        setError({ message: "", errorType: validationError });
     };
-    function isPasswordStrong(password: string): boolean {
-        const regex = new RegExp('^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$');
-        return regex.test(password);
-    }
 
-    function validatePasswords(password: string, confirmPassword: string) {
-        if (!isPasswordStrong(password)) {
-            setError({
-                message: '',
-                errorType: ErrorType.TooWeakPassword
-            });
-        }
-        else {
-            if (password !== confirmPassword) {
-                setError({
-                    message: '',
-                    errorType: ErrorType.PasswordNotMatch
+    const handleCheckEmail = async (event: React.FocusEvent<HTMLInputElement>) => {
+        const { value } = event.target;
+
+        try {
+            const response = await fetchUserByEmail(value);
+
+            if (response) {
+                setEmailError({
+                    message: 'Email is already registered',
+                    errorType: ErrorType.EmailRegistered
                 });
-            }
-            else {
-                setError({
+            } else {
+                setEmailError({
                     message: '',
                     errorType: ErrorType.NoError
                 });
             }
+        } catch (error) {
+            
         }
-    }
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (isSubmitting || error.errorType === ErrorType.PasswordNotMatch || error.errorType === ErrorType.TooWeakPassword) return;
+        if (isSubmitting || error.errorType !== ErrorType.NoError) return;
+
         setIsSubmitting(true);
-        setError({
-            message: '',
-            errorType: ErrorType.NoError
-        });
+        setError({ message: "", errorType: ErrorType.NoError });
 
         const registerCredentials = {
             email: credentials.email,
             password: credentials.password,
             firstName: credentials.firstName,
             lastName: credentials.lastName,
-            birthday: credentials.birthday
-        }
+            birthday: credentials.birthday,
+        };
 
-        let response;
         try {
-            response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/registration`, registerCredentials);
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/auth/registration`, registerCredentials);
             console.log(response);
             navigate(AppRoutes.LOG_IN);
         } catch (error) {
-            console.log(error);
+            console.error(error);
         } finally {
             setIsSubmitting(false);
         }
     };
 
-    return(
+    return (
         <div className="min-w-full min-h-full flex justify-center items-center">
             <div>
                 <h1>Welcome to Booky</h1>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="email">Email</label>
-                    <br></br>
-                    <input type="email" name="email" value={credentials.email} onChange={handleInputChange} required className="border solid"></input>
-                    <br></br>
+                    <br />
+                    <input type="email" name="email" value={credentials.email} onChange={handleInputChange} onBlur={handleCheckEmail} required className="border solid" />
+                    {emailError.errorType === ErrorType.EmailRegistered && (
+                        <>
+                            <br />
+                            <span className="error-message">{emailError.message}</span>
+                        </>
+                    )}
+                    <br />
                     <label htmlFor="firstName">Firstname</label>
-                    <br></br>
-                    <input type="text" name="firstName" value={credentials.firstName} onChange={handleInputChange} required className="border solid"></input>
-                    <br></br>
+                    <br />
+                    <input type="text" name="firstName" value={credentials.firstName} onChange={handleInputChange} required className="border solid" />
+                    <br />
                     <label htmlFor="lastName">Lastname</label>
-                    <br></br>
-                    <input type="text" name="lastName" value={credentials.lastName} onChange={handleInputChange} required className="border solid"></input>
-                    <br></br>
-                    <label htmlFor="birthday">birthday</label>
-                    <br></br>
-                    <input type="date" name="birthday" value={credentials.birthday} onChange={handleInputChange} required className="border solid"></input>
-                    <br></br>
+                    <br />
+                    <input type="text" name="lastName" value={credentials.lastName} onChange={handleInputChange} required className="border solid" />
+                    <br />
+                    <label htmlFor="birthday">Birthday</label>
+                    <br />
+                    <input type="date" name="birthday" value={credentials.birthday} onChange={handleInputChange} required className="border solid" />
+                    <br />
                     <label htmlFor="password">Password</label>
-                    <br></br>
-                    <input type="password" name="password" value={credentials.password} onChange={handlePasswordChange} required className="border solid"></input>
+                    <br />
+                    <input type="password" name="password" value={credentials.password} onChange={handlePasswordChange} required className="border solid" />
                     {error.errorType === ErrorType.TooWeakPassword && (
-                            <>
-                                <br />
-                                <span className="error-message">Password is too weak</span>
-                            </>
-                        )}
-                    <br></br>
-                    <label htmlFor="confirmPassword">Confirm password</label>
-                    <br></br>
-                    <input type="password" name="confirmPassword" value={credentials.confirmPassword} onChange={handleConfirmPasswordChange} required className="border solid"></input>
+                        <>
+                            <br />
+                            <span className="error-message">Password is too weak</span>
+                        </>
+                    )}
+                    <br />
+                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <br />
+                    <input type="password" name="confirmPassword" value={credentials.confirmPassword} onChange={handleConfirmPasswordChange} required className="border solid" />
                     {error.errorType === ErrorType.PasswordNotMatch && (
-                            <>
-                                <br />
-                                <span className="error-message">Passwords do not match</span>
-                            </>
-                        )}
+                        <>
+                            <br />
+                            <span className="error-message">Passwords do not match</span>
+                        </>
+                    )}
                     <div className="child">
-                            <button type="submit" className="border solid">Sign Up</button>
-                        </div>
+                        <button type="submit" className="border solid">
+                            Sign Up
+                        </button>
+                    </div>
                 </form>
                 <span>Already have an account? </span>
-                <Link to={AppRoutes.LOG_IN} className="no-underline text-[hsl(272,76%,52%)]">Log in</Link>
+                <a href={AppRoutes.LOG_IN} className="no-underline text-[hsl(272,76%,52%)]">
+                    Log in
+                </a>
             </div>
         </div>
     );
