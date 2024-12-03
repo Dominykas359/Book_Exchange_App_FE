@@ -16,3 +16,24 @@ export const fetchUserByEmail = async (email: string): Promise<User> => {
 
     return response.data;
 }
+
+export const changePassword = async (id: string, password: User): Promise<User> => {
+
+    const response = await axios.put<User>(`${url}/change-password/${id}`, password);
+
+    return response.data;
+}
+
+export const updateUser = async (id: string, updatedUser: User): Promise<User> => {
+
+    const response = await axios.put<User>(`${url}/${id}`, updatedUser);
+
+    return response.data;
+}
+
+export const deleteUser = async (id: string): Promise<User> => {
+
+    const response = await axios.delete<User>(`${url}/${id}`);
+
+    return response.data;
+}
