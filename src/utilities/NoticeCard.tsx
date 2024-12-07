@@ -80,16 +80,9 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
             id: '',
             noticeId: notice.id,
             userId: currentUser?.id || '',
+            buyer: notice.userId,
         };
-
-        const historyFromPublisher: HistoryEntry = {
-            id: '',
-            noticeId: notice.id,
-            userId: notice.userId,
-        }
-
         await createHistory(newHistory);
-        await createHistory(historyFromPublisher);
     };
 
     const handleRent = async () => {
@@ -105,16 +98,10 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
             id: '',
             noticeId: notice.id,
             userId: currentUser?.id || '',
+            buyer: notice.userId,
         };
 
-        const historyFromPublisher: HistoryEntry = {
-            id: '',
-            noticeId: notice.id,
-            userId: notice.userId,
-        }
-
         await createHistory(newHistory);
-        await createHistory(historyFromPublisher);
     };
 
     return (

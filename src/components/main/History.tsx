@@ -3,11 +3,12 @@ import Header from "../../utilities/Header";
 import { HistoryEntry } from "../../models/HistoryEntry";
 import { getHistory } from "../../api/HistoryApi";
 import { User } from "../../models/User";
+import HistoryCard from "../../utilities/HistoryCard";
 
 function History(){
 
-    const[histories, setHistories] = useState<HistoryEntry[] | null>(null);
-    const[currentUser, setCurrentUser] = useState<User | null>(null);
+    const [histories, setHistories] = useState<HistoryEntry[] | null>(null);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
 
     useEffect(() => {
         const initializeUser = async () => {
@@ -31,15 +32,25 @@ function History(){
         if(currentUser){
             fetchHistories(currentUser.id);
         }
-    }, [currentUser]);
-
-    console.log(currentUser);
-    console.log(histories);
+    });
 
     return(
         <div>
             <Header />
-            <h1>History</h1>
+            <div>
+                {histories ? (
+                    <div>
+                        {histories?.map(history => (
+                            <div key={history.id}>
+                                <HistoryCard key={history.id} history={history}/>
+                            </div>
+                        ))}
+                    </div>
+                ):(
+                    <p>Loading</p>
+                )}
+                
+            </div>
         </div>
     );
 }

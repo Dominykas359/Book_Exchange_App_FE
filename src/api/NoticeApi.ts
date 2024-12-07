@@ -16,3 +16,10 @@ export const getAllNotices = async (): Promise<Notice[]> => {
 
     return response.data;
 }
+
+export const fetchNoticeById = async (id: string): Promise<Notice> => {
+
+    const response = await axios.get<Notice>(`${url}/${id}`);
+
+    return response.data;
+}
