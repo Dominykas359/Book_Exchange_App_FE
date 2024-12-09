@@ -12,12 +12,9 @@ import Chat from './components/main/Chat';
 import Chats from './components/main/Chats';
 import ErrorPage from './utilities/ErrorPage';
 import Comments from './components/main/Comments';
+import ChatFromPublisher from './components/main/ChatFromPublisher';
 
 function App() {
-
-  const url = import.meta.env.VITE_BACKEND_URL;
-
-  console.log(url);
 
   return (
     <BrowserRouter>
@@ -28,6 +25,7 @@ function App() {
         <Route path={AppRoutes.NOTICE} element={<Notice />} />
         <Route path={AppRoutes.CHATS} element={<Chats />} />
         <Route path={AppRoutes.CHAT} element={<Chat />} />
+        <Route path={AppRoutes.CHATPUBLISHER} element={<ChatFromPublisher />} />
         <Route path={AppRoutes.HISTORY} element={<History />} />
         <Route path={AppRoutes.SETTINGS} element={<Settings />} />
         <Route path={AppRoutes.LOG_IN} element={<Login />} />
