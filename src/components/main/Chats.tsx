@@ -5,6 +5,7 @@ import { ChatEntry } from "../../models/ChatEntry";
 import { fetchChatsByUser } from "../../api/ChatApi";
 import { Link } from "react-router-dom";
 import { AppRoutes } from "../../utilities/Routes";
+import ChatCard from "../../utilities/ChatCard";
 
 function Chats() {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -39,7 +40,7 @@ function Chats() {
             {chats?.map((chat) => (
                 <div key={chat.id}>
                     <Link to={AppRoutes.CHATPUBLISHER} state={{ chat }}>
-                        {chat.id}
+                        <ChatCard chat={chat}/>
                     </Link>
                 </div>
             ))}
