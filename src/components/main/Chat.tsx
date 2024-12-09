@@ -1,8 +1,209 @@
+import { useEffect, useState } from "react";
+import { User } from "../../models/User";
+import { Message } from "../../models/Message";
+import { ChatEntry } from "../../models/ChatEntry";
+import { fetchUserById } from "../../api/UserApi";
+import { fetchChatByNoticeId, fetchChatWithMessages } from "../../api/ChatApi";
+import { useLocation } from "react-router-dom";
+import { deleteMessage, sendMessage, updateMessage } from "../../api/MessageApi";
+import ConfirmationModal from "../../utilities/ConfirmationModal";
+import UpdateModal from "../../utilities/UpdateModal";
+function Chat() {
+    const location = useLocation();
+    const { notice, publication } = location.state || {};
+    const [user, setUser] = useState<User | null>(null);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [tempChat, setTempChat] = useState<ChatEntry | null>(null);
+    const [chat, setChat] = useState<ChatEntry | null>(null);
+    const [messageText, setMessageText] = useState<string>("");
+    const [showConfirmationModal, setShowConfirmationModal] = useState<boolean>(false);
+    const [messageToDeleteId, setMessageToDeleteId] = useState<string | null>(null);
+    const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+    const [messageToUpdate, setMessageToUpdate] = useState<Message | null>(null); // Message being updated
 
-function Chat(){
+    useEffect(() => {
+        const initializeCurrentUser = () => {
+            const data = localStorage.getItem("user");
+            if (data) {
+                const userData = JSON.parse(data);
+                setCurrentUser(userData);
+            }
+        };
 
-    return(
-        <h1>Chat....</h1>
+        initializeCurrentUser();
+    }, []);
+
+    useEffect(() => {
+        if (notice?.id) {
+            const initializeTempChat = async (id: string) => {
+                try {
+                    const chat = await fetchChatByNoticeId(id);
+                    setTempChat(chat);
+                } catch (error) {
+                    console.error("Error fetching temporary chat:", error);
+                }
+            };
+
+            initializeTempChat(notice.id);
+        }
+    }, [notice]);
+
+    useEffect(() => {
+        if (tempChat?.id) {
+            const initializeChatWithMessages = async (id: string) => {
+                try {
+                    const chat = await fetchChatWithMessages(id);
+                    setChat(chat);
+                } catch (error) {
+                    console.error("Error fetching chat with messages:", error);
+                }
+            };
+
+            initializeChatWithMessages(tempChat.id);
+        }
+    }, [tempChat]);
+
+    useEffect(() => {
+        if (notice?.userId) {
+            const initializeUser = async (id: string) => {
+                try {
+                    const data = await fetchUserById(id);
+                    setUser(data);
+                } catch (error) {
+                    console.error("Error fetching user:", error);
+                }
+            };
+
+            initializeUser(notice.userId);
+        }
+    }, [notice]);
+
+    const handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
+
+        const newMessage: Message = {
+            id: "",
+            userId: currentUser?.id || "",
+            chatId: chat?.id || "",
+            text: messageText,
+            timeSent: new Date(),
+        };
+
+        try {
+            await sendMessage(newMessage);
+            setMessageText("");
+
+            // Refresh the chat messages
+            if (chat?.id) {
+                const updatedChat = await fetchChatWithMessages(chat.id);
+                setChat(updatedChat);
+            }
+        } catch (error) {
+            console.error("Error sending message:", error);
+        }
+    };
+
+    const handleUpdate = (message: Message) => {
+        setMessageToUpdate(message); // Set the message to be updated
+        setShowUpdateModal(true); // Show the modal
+    };
+
+    const handleCancelUpdate = () => {
+        setShowUpdateModal(false);
+        setMessageToUpdate(null); // Clear the selected message
+    };
+
+    const handleUpdateSubmit = async (updatedText: string) => {
+        if (!messageToUpdate) return;
+
+        try {
+            const updatedMessage = { ...messageToUpdate, text: updatedText };
+            await updateMessage(updatedMessage, messageToUpdate.id);
+            setShowUpdateModal(false);
+            setMessageToUpdate(null);
+
+            // Refresh the chat messages
+            if (chat?.id) {
+                const updatedChat = await fetchChatWithMessages(chat.id);
+                setChat(updatedChat);
+            }
+        } catch (error) {
+            console.error("Error updating message:", error);
+        }
+    };
+
+    const handleConfirmation = (id: string) => {
+        setMessageToDeleteId(id);
+        setShowConfirmationModal(true);
+    };
+
+    const handleCancelConfirmation = () => {
+        setShowConfirmationModal(false);
+        setMessageToDeleteId(null);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!messageToDeleteId) return;
+
+        try {
+            await deleteMessage(messageToDeleteId);
+            setShowConfirmationModal(false);
+            setMessageToDeleteId(null);
+
+            // Refresh the chat messages
+            if (chat?.id) {
+                const updatedChat = await fetchChatWithMessages(chat.id);
+                setChat(updatedChat);
+            }
+        } catch (error) {
+            console.error("Error deleting message:", error);
+        }
+    };
+
+    return (
+        <>
+            <h1>
+                Chat with {user?.firstName} {user?.lastName} about {publication?.title}
+            </h1>
+            <div>
+                {chat?.messages.map((message) => (
+                    <div key={message.id}>
+                        {message.text}
+                        {message.userId === currentUser?.id ? (
+                            <>
+                                <button onClick={() => handleUpdate(message)}>Update</button>
+                                <button onClick={() => handleConfirmation(message.id)}>Delete</button>
+                            </>
+                        ) : null}
+                    </div>
+                ))}
+            </div>
+            <ConfirmationModal
+                isOpen={showConfirmationModal}
+                message="Are you sure you want to delete this message?"
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelConfirmation}
+            />
+            {showUpdateModal && messageToUpdate && (
+                <UpdateModal
+                    messageText={messageToUpdate.text}
+                    onUpdate={handleUpdateSubmit}
+                    onCancel={handleCancelUpdate}
+                />
+            )}
+            <div>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        placeholder="Write your message"
+                        value={messageText}
+                        onChange={(e) => setMessageText(e.target.value)}
+                        required
+                    />
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </>
     );
 }
 
