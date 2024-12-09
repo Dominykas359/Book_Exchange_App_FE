@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { AppRoutes } from "./Routes";
 import { createHistory } from "../api/HistoryApi";
 import { HistoryEntry } from "../models/HistoryEntry";
+import { createChat, fetchChatByNoticeId } from "../api/ChatApi";
+import { ChatEntry } from "../models/ChatEntry";
 
 interface NoticeCardProps {
     notice: Notice;
@@ -104,6 +106,22 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
         await createHistory(newHistory);
     };
 
+    const handleChat = async () => {
+        try {
+            await fetchChatByNoticeId(notice.id);
+        } catch (error) {
+            const newChat: ChatEntry = {
+                id: "",
+                userId: currentUser?.id || '',
+                noticeId: notice.id,
+                messages: [],
+                receiver: notice.userId
+            };
+
+            await createChat(newChat);
+        }
+    };
+
     return (
         <div className="border p-4 rounded-lg shadow-md bg-white" style={{ height: '250px', overflow: 'hidden' }}>
             {publication ? (
@@ -121,7 +139,7 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
                     )}
                     <p>Posted by {user?.firstName} {user?.lastName}</p>
                     <div>
-                        <Link to={AppRoutes.CHATS}>Chat</Link>
+                        {currentUser?.id !== notice.userId && (<Link to={AppRoutes.CHAT} state={{ notice, publication }} onClick={handleChat}>Chat</Link>)}
                         <Link to={AppRoutes.COMMENTS} state={{ notice, publication }}>Comment</Link>
                         {currentUser?.id === notice?.userId ? (
                             (publication.status !== "SOLD" && publication.status !== "RENTED") && (
