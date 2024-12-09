@@ -1,8 +1,9 @@
 import { Message } from "./Message";
 
-export interface Chat{
+export interface ChatEntry{
     id: string,
     userId: string,
     noticeId: string,
-    messages: Message[]
+    messages: Message[],
+    receiver: string,
 }

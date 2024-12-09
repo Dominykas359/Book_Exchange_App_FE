@@ -4,12 +4,13 @@ export const AppRoutes = {
     SIGN_UP: '/signup',
 
     NOTICES: '/notices',
-    NOTICE: '/notice/:id',
+    NOTICE: '/notice',
     NEW_NOTICE: '/new/notice',
     SETTINGS: '/settings',
     HISTORY: '/history',
     CHATS: '/chats',
-    CHAT: '/chat/:id',
+    CHAT: '/chat',
+    CHATPUBLISHER: '/chat-from-publisher',
     ERROR_PAGE: '/error',
     COMMENTS: '/comments',
 
