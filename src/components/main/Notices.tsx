@@ -161,9 +161,13 @@ function Notices() {
             <div className="flex">
                 <div className="h-screen flex flex-col border-r border-gray-300 w-1/5 mr-1">
                     <div className="flex flex-col">
-                        <Link 
+                        {currentUser?.role !== "ADMIN" && (
+                            <Link 
                             to={AppRoutes.NEW_NOTICE} 
-                            className="flex items-center justify-center border solid text-lg px-3 py-1 rounded-3xl my-1 bg-blue-500 text-white">Post notice</Link>
+                            className="flex items-center justify-center border solid text-lg px-3 py-1 rounded-3xl my-1 bg-blue-500 text-white">
+                                Post notice
+                            </Link>
+                        )}
                         <button
                             type="button"
                             onClick={resetFilters}

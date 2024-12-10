@@ -3,6 +3,13 @@ import { User } from "../models/User";
 
 const url = `${import.meta.env.VITE_BACKEND_URL}/users`;
 
+export const fetchAllUsers = async (): Promise<User[]> => {
+
+    const response = await axios.get<User[]>(`${url}`);
+
+    return response.data;
+}
+
 export const fetchUserById = async (id: string): Promise<User> => {
 
     const response = await axios.get<User>(`${url}/${id}`);
