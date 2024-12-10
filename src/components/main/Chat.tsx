@@ -161,23 +161,66 @@ function Chat() {
     };
 
     return (
-        <>
-            <h1>
-                Chat with {user?.firstName} {user?.lastName} about {publication?.title}
-            </h1>
-            <div>
-                {chat?.messages.map((message) => (
-                    <div key={message.id}>
-                        {message.text}
-                        {message.userId === currentUser?.id ? (
-                            <>
-                                <button onClick={() => handleUpdate(message)}>Update</button>
-                                <button onClick={() => handleConfirmation(message.id)}>Delete</button>
-                            </>
-                        ) : null}
+        <div className="flex flex-col min-h-screen bg-gray-100">
+            <div className="flex flex-grow justify-center items-center">
+                <div className="flex flex-col w-2/3 h-4/5 bg-white shadow-lg rounded-lg overflow-hidden">
+                    {/* Chat Header */}
+                    <div className="p-4 border-b bg-blue-500 text-white">
+                    Chat with {user?.firstName} {user?.lastName} about {publication?.title}
                     </div>
-                ))}
+                    {/* Chat Messages */}
+                    <div className="flex flex-col flex-grow p-4 overflow-y-auto">
+                        {chat?.messages.map((message) => (
+                            <div
+                                key={message.id}
+                                className={`p-2 rounded-lg mb-2 ${
+                                    message.userId === currentUser?.id
+                                        ? "self-end bg-blue-100"
+                                        : "self-start bg-gray-200"
+                                }`}
+                            >
+                                {message.text}
+                                {message.userId === currentUser?.id && (
+                                    <div className="mt-1 flex space-x-2">
+                                        <button
+                                            className="text-sm text-blue-600"
+                                            onClick={() => handleUpdate(message)}
+                                        >
+                                            Update
+                                        </button>
+                                        <button
+                                            className="text-sm text-red-600"
+                                            onClick={() => handleConfirmation(message.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                    {/* Chat Input */}
+                    <div className="p-4 border-t flex items-center">
+                        <form className="flex w-full" onSubmit={handleSubmit}>
+                            <input
+                                type="text"
+                                placeholder="Write your message..."
+                                value={messageText}
+                                onChange={(e) => setMessageText(e.target.value)}
+                                className="flex-grow p-2 border rounded-lg focus:outline-none"
+                                required
+                            />
+                            <button
+                                type="submit"
+                                className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg"
+                            >
+                                Send
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
+            {/* Modals */}
             <ConfirmationModal
                 isOpen={showConfirmationModal}
                 message="Are you sure you want to delete this message?"
@@ -191,19 +234,7 @@ function Chat() {
                     onCancel={handleCancelUpdate}
                 />
             )}
-            <div>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        placeholder="Write your message"
-                        value={messageText}
-                        onChange={(e) => setMessageText(e.target.value)}
-                        required
-                    />
-                    <button type="submit">Send</button>
-                </form>
-            </div>
-        </>
+        </div>
     );
 }
 

@@ -161,22 +161,25 @@ function Notices() {
             <div className="flex">
                 <div className="h-screen flex flex-col border-r border-gray-300 w-1/5 mr-1">
                     <div className="flex flex-col">
-                        <Link to={AppRoutes.NEW_NOTICE}>Add new notice</Link>
+                        <Link 
+                            to={AppRoutes.NEW_NOTICE} 
+                            className="flex items-center justify-center border solid text-lg px-3 py-1 rounded-3xl my-1 bg-blue-500 text-white">Post notice</Link>
                         <button
                             type="button"
-                            onClick={resetFilters}>
+                            onClick={resetFilters}
+                            className="border solid text-lg px-3 py-1 rounded-3xl my-1 bg-blue-500 text-white">
                             Reset filters
                         </button>
                     </div>
                     <div className="flex h-full">
                         <form
-                            className="flex flex-col p-4 text-sm h-full"
+                            className="flex flex-col p-4 text-m h-full"
                             onSubmit={(e) => {
                                 e.preventDefault();
                                 handleSearch();
                             }}
                         >
-                            <label htmlFor="notices">
+                            <label htmlFor="notices" className="text-m">
                                 <input
                                     type="radio"
                                     name="notices"
@@ -186,7 +189,7 @@ function Notices() {
                                 />
                                 Posted by me
                             </label>
-                            <label htmlFor="all">
+                            <label htmlFor="all" className="text-m">
                                 <input
                                     type="radio"
                                     name="notices"
@@ -196,8 +199,8 @@ function Notices() {
                                 />
                                 All notices
                             </label>
-                            <label className="flex flex-col">
-                                Publication type
+                            <label className="flex flex-col text-m mt-2">
+                                <span className="font-bold">Publication type</span>
                                 <div className="flex flex-col">
                                     <label htmlFor="book">
                                         <input
@@ -231,28 +234,30 @@ function Notices() {
                                     </label>
                                 </div>
                             </label>
-                            <label htmlFor="author" className="flex flex-col">
-                                Author
+                            <label htmlFor="author" className="flex flex-col text-m mt-2">
+                                <span className="font-bold">Author</span>
                                 <input
                                     type="text"
                                     id="author"
                                     placeholder="Type to search..."
                                     value={author}
                                     onChange={(e) => setAuthor(e.target.value)}
+                                    className="border solid rounded-lg my-1 p-1"
                                 />
                             </label>
-                            <label htmlFor="title" className="flex flex-col">
-                                Title
+                            <label htmlFor="title" className="flex flex-col text-m mt-2">
+                                <span className="font-bold">Title</span>
                                 <input
                                     type="text"
                                     id="title"
                                     placeholder="Type to search..."
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
+                                    className="border solid rounded-lg my-1 p-1"
                                 />
                             </label>
-                            <label className="flex flex-col">
-                                Release year
+                            <label className="flex flex-col text-m mt-2">
+                                <span className="font-bold">Release year</span>
                                 <div>
                                     From:
                                     <input
@@ -260,6 +265,7 @@ function Notices() {
                                         id="from"
                                         value={fromDate}
                                         onChange={(e) => setFromDate(e.target.value)}
+                                        className="border solid rounded-lg my-1 p-1"
                                     />
                                 </div>
                                 <div>
@@ -269,11 +275,12 @@ function Notices() {
                                         id="to"
                                         value={toDate}
                                         onChange={(e) => setToDate(e.target.value)}
+                                        className="border solid rounded-lg my-1 p-1"
                                     />
                                 </div>
                             </label>
-                            <label className="flex flex-col">
-                                Price
+                            <label className="flex flex-col text-m mt-2">
+                                <span className="font-bold">Price</span>
                                 <div>
                                     From:
                                     <input
@@ -281,6 +288,7 @@ function Notices() {
                                         id="fromPrice"
                                         value={fromPrice || ''}
                                         onChange={(e) => setFromPrice(parseFloat(e.target.value) || undefined)}
+                                        className="border solid rounded-lg my-1 p-1"
                                     />
                                 </div>
                                 <div>
@@ -290,27 +298,29 @@ function Notices() {
                                         id="toPrice"
                                         value={toPrice || ''}
                                         onChange={(e) => setToPrice(parseFloat(e.target.value) || undefined)}
+                                        className="border solid rounded-lg my-1 p-1"
                                     />
                                 </div>
                             </label>
-                            <label htmlFor="languages" className="flex flex-col">
-                                Language
+                            <label htmlFor="languages" className="flex flex-col text-m mt-2">
+                                <span className="font-bold">Language</span>
                                 <select
                                     id="languages"
                                     name="languages"
                                     value={language}
                                     onChange={(e) => setLanguage(e.target.value)}
+                                    className="border solid rounded-lg my-1 p-1"
                                 >
                                     <option value="">Select</option>
-                                    <option value="english">English</option>
-                                    <option value="lithuanian">Lithuanian</option>
-                                    <option value="german">German</option>
-                                    <option value="russian">Russian</option>
-                                    <option value="spanish">Spanish</option>
+                                    <option value="English">English</option>
+                                    <option value="Lithuanian">Lithuanian</option>
+                                    <option value="German">German</option>
+                                    <option value="Russian">Russian</option>
+                                    <option value="Spanish">Spanish</option>
                                 </select>
                             </label>
-                            <label className="flex flex-col">
-                                Status
+                            <label className="flex flex-col text-m mt-2">
+                                <span className="font-bold">Status</span>
                                 <div>
                                     <input
                                         type="radio"
@@ -319,6 +329,7 @@ function Notices() {
                                         value="renting"
                                         checked={status === "renting"}
                                         onChange={(e) => setStatus(e.target.value)}
+                                        className="border solid rounded-lg my-1 p-1"
                                     />
                                     Renting
                                 </div>
@@ -330,24 +341,26 @@ function Notices() {
                                         value="selling"
                                         checked={status === "selling"}
                                         onChange={(e) => setStatus(e.target.value)}
+                                        className="border solid rounded-lg my-1 p-1"
                                     />
                                     Selling
                                 </div>
                             </label>
-                            <label htmlFor="cover" className="flex flex-col">
-                                Cover
+                            <label htmlFor="cover" className="flex flex-col text-m mt-2">
+                                <span className="font-bold">Cover</span>
                                 <select
                                     id="cover"
                                     name="cover"
                                     value={cover}
                                     onChange={(e) => setCover(e.target.value)}
+                                    className="border solid rounded-lg my-1 p-1"
                                 >
                                     <option value="">Select</option>
                                     <option value="hard">Hard</option>
                                     <option value="soft">Soft</option>
                                 </select>
                             </label>
-                            <button type="submit">Search</button>
+                            <button type="submit" className="border solid text-lg px-3 py-1 rounded-3xl my-1 bg-blue-500 text-white">Search</button>
                         </form>
                     </div>
                 </div>

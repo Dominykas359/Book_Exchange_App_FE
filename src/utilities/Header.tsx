@@ -25,7 +25,7 @@ function Header(){
                 <Link to={AppRoutes.SETTINGS}>
                     <img src="/settings.png" className="w-16 h-16 hover:scale-110 transition-transform mx-4"></img>
                 </Link>
-                <div className="ml-auto mr-2 hover:scale-110 transition-transform rounded-full bg-red-500 text-white shadow hover:bg-red-700 px-4 py-2">
+                <div className="ml-auto mr-2 hover:scale-110 transition-transform rounded-full bg-blue-500 text-white shadow hover:bg-blue-700 px-4 py-2">
                     <button onClick={handleClick}>Log out</button>
                 </div>
             </div>

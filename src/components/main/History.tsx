@@ -38,6 +38,7 @@ function History(){
         <div>
             <Header />
             <div>
+                <h1 className="text-4xl ml-4">History</h1>
                 {histories ? (
                     <div>
                         {histories?.map(history => (

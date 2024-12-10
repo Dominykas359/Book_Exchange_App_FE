@@ -39,7 +39,11 @@ function Comments() {
     
     return (
         <div>
-            <h2>Comments about {publication.title}</h2>
+            <h1 className="text-3xl ml-2 mt-2 mb-2">Comments about {publication.title}</h1>
+            <div>
+                <Link to={AppRoutes.NOTICES} className="border solid text-xl px-3 py-1 rounded-3xl my-1 bg-blue-300 text-white">Back to notices</Link>
+                <button onClick={handleCreateCommentModal} className="border solid text-lg px-3 py-1 rounded-3xl my-1 bg-blue-500 text-white">Post comment</button>
+            </div>
             {comments.length > 0 ? (
                 comments.map(comment => (
                     <SingleComment key={comment.id} comment={comment} />
@@ -47,11 +51,6 @@ function Comments() {
             ) : (
                 <p>No comments available</p>
             )}
-            <div>
-                <Link to={AppRoutes.NOTICES}>Back to notices</Link>
-                <button onClick={handleCreateCommentModal}>Post comment</button>
-            </div>
-
             {createComment && (
                 <ManageComment 
                     onPost={handlePostComment} 

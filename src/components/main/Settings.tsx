@@ -170,80 +170,129 @@ function Settings(){
         }
     }
 
-    return(
+    return (
         <div>
             <Header />
-            <div className="flex flex-col">
-                <h1>Personal information</h1>
-                <form onSubmit={handleInfoSubmit}>
-                    <label htmlFor="email">Email</label>
-                    <br />
-                    <input type="email" name="email" value={email} onChange={handleEmailChange} onBlur={handleCheckEmail} required className="border solid" />
-                    {emailError.errorType === ErrorType.EmailRegistered && (
-                        <>
-                            <br />
-                            <span className="error-message">{emailError.message}</span>
-                        </>
-                    )}
-                    <br />
-                    <label htmlFor="firstName">Firstname</label>
-                    <br />
-                    <input type="text" name="firstName" value={firstName} onChange={handleFirstNameChange} required className="border solid" />
-                    <br />
-                    <label htmlFor="lastName">Lastname</label>
-                    <br />
-                    <input type="text" name="lastName" value={lastName} onChange={handleLastNameChange} required className="border solid" />
-                    <br />
-                    <label htmlFor="birthday">Birthday</label>
-                    <br />
-                    <input type="date" name="birthday" value={birthday.toISOString().split('T')[0]} onChange={handleBirthdayChange} required className="border solid" />
-                    <br />
-                    <button type="submit">Save</button>
-                </form>
-            </div>
-            <div className="flex flex-col">
-                <h1>Password change</h1>
-                <form onSubmit={handlePasswordSubmit}>
-                    <label htmlFor="newPassword">New Password</label>
-                    <input
-                        type="password"
-                        name="newPassword"
-                        placeholder="******"
-                        value={password}
-                        onChange={handleNewPasswordChange}
-                        className="setting-input"
-                        required
-                    />
-                    <br />
-                    {passwordError.errorType === ErrorType.TooWeakPassword && (
-                        <>
-                            <span className="error-message">Password is too weak</span>
-                        </>
-                    )}
-                                
-                    <div className="input-div">
-                        <label htmlFor="confirmPassword">Confirm New Password</label>
+            <div className="flex">
+                {/* Left Section - Personal Information */}
+                <div className="flex-1 flex flex-col items-center justify-center p-6 border-r border-gray-300">
+                    <h1 className="text-xl font-semibold mb-4">Personal Information</h1>
+                    <form onSubmit={handleInfoSubmit} className="w-3/4 max-w-md">
+                        <label htmlFor="email" className="block text-sm font-medium">
+                            Email
+                        </label>
+                        <input
+                            type="email"
+                            name="email"
+                            value={email}
+                            onChange={handleEmailChange}
+                            onBlur={handleCheckEmail}
+                            required
+                            className="w-full border border-gray-300 rounded-lg my-2 p-2"
+                        />
+                        {emailError.errorType === ErrorType.EmailRegistered && (
+                            <span className="text-red-500">{emailError.message}</span>
+                        )}
+    
+                        <label htmlFor="firstName" className="block text-sm font-medium">
+                            Firstname
+                        </label>
+                        <input
+                            type="text"
+                            name="firstName"
+                            value={firstName}
+                            onChange={handleFirstNameChange}
+                            required
+                            className="w-full border border-gray-300 rounded-lg my-2 p-2"
+                        />
+    
+                        <label htmlFor="lastName" className="block text-sm font-medium">
+                            Lastname
+                        </label>
+                        <input
+                            type="text"
+                            name="lastName"
+                            value={lastName}
+                            onChange={handleLastNameChange}
+                            required
+                            className="w-full border border-gray-300 rounded-lg my-2 p-2"
+                        />
+    
+                        <label htmlFor="birthday" className="block text-sm font-medium">
+                            Birthday
+                        </label>
+                        <input
+                            type="date"
+                            name="birthday"
+                            value={birthday.toISOString().split('T')[0]}
+                            onChange={handleBirthdayChange}
+                            required
+                            className="w-full border border-gray-300 rounded-lg my-2 p-2"
+                        />
+    
+                        <button
+                            type="submit"
+                            className="w-full bg-blue-500 text-white rounded-lg py-2 mt-4 hover:bg-blue-600"
+                        >
+                            Save
+                        </button>
+                    </form>
+                </div>
+    
+                {/* Right Section - Password Change */}
+                <div className="flex-1 flex flex-col items-center justify-center p-6">
+                    <h1 className="text-xl font-semibold mb-4">Password Change</h1>
+                    <form onSubmit={handlePasswordSubmit} className="w-3/4 max-w-md">
+                        <label htmlFor="newPassword" className="block text-sm font-medium">
+                            New Password
+                        </label>
+                        <input
+                            type="password"
+                            name="newPassword"
+                            placeholder="******"
+                            value={password}
+                            onChange={handleNewPasswordChange}
+                            className="w-full border border-gray-300 rounded-lg my-2 p-2"
+                            required
+                        />
+                        {passwordError.errorType === ErrorType.TooWeakPassword && (
+                            <span className="text-red-500">Password is too weak</span>
+                        )}
+    
+                        <label htmlFor="confirmPassword" className="block text-sm font-medium mt-4">
+                            Confirm New Password
+                        </label>
                         <input
                             type="password"
                             name="confirmPassword"
                             placeholder="******"
                             value={confirmPassword}
                             onChange={handleConfirmPasswordChange}
-                            className="setting-input"
+                            className="w-full border border-gray-300 rounded-lg my-2 p-2"
                             required
                         />
-                        <br />
                         {passwordError.errorType === ErrorType.PasswordNotMatch && (
-                            <>
-                                <span className="error-message">Passwords do not match</span>
-                            </>
+                            <span className="text-red-500">Passwords do not match</span>
                         )}
-                    </div>
-                    <button type="submit">Change password</button>
-                </form>
-
-                <button onClick={handleConfirmation}>Delete account</button>
+    
+                        <button
+                            type="submit"
+                            className="w-full bg-green-500 text-white rounded-lg py-2 mt-4 hover:bg-green-600"
+                        >
+                            Change Password
+                        </button>
+                    </form>
+    
+                    <button
+                        onClick={handleConfirmation}
+                        className="w-3/4 max-w-md bg-red-500 text-white rounded-lg py-2 mt-4 hover:bg-red-600"
+                    >
+                        Delete Account
+                    </button>
+                </div>
             </div>
+    
+            {/* Confirmation Modal */}
             <ConfirmationModal
                 isOpen={showConfirmationModal}
                 message="Are you sure you want to delete your account?"
@@ -252,6 +301,7 @@ function Settings(){
             />
         </div>
     );
+    
 }
 
 export default Settings;

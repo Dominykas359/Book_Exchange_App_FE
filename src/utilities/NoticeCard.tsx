@@ -123,35 +123,39 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
     };
 
     return (
-        <div className="border p-4 rounded-lg shadow-md bg-white" style={{ height: '250px', overflow: 'hidden' }}>
+        <div className="border p-3 rounded-lg shadow-md bg-white my-1" style={{ height: '280px', overflow: 'hidden' }}>
             {publication ? (
                 <>
                     <h2 className="text-xl font-bold">{publication.title}</h2>
                     <p>Author: {publication.author}</p>
                     <p>Year: {new Date(publication.releaseYear).getFullYear()}</p>
                     <p>Price: {publication.price}</p>
-                    <p>Status: {publication.status}</p>
+                    <p>Language: {publication.language}</p>
                     {publication.colored && (
-                        <span>Colored: {publication.colored ? <span>Yes</span> : <span>No</span>}</span>
+                        <p>Colored: {publication.colored ? <span>Yes</span> : <span>No</span>}</p>
                     )}
                     {publication.number && (
                         <p>Number: {publication.number}</p>
                     )}
+                    {publication.cover && (
+                        <p>Cover: {publication.cover}</p>
+                    )}
+                    <p>Status: {publication.status}</p>
                     <p>Posted by {user?.firstName} {user?.lastName}</p>
                     <div>
-                        {currentUser?.id !== notice.userId && (<Link to={AppRoutes.CHAT} state={{ notice, publication }} onClick={handleChat}>Chat</Link>)}
-                        <Link to={AppRoutes.COMMENTS} state={{ notice, publication }}>Comment</Link>
+                        {currentUser?.id !== notice.userId && (<Link to={AppRoutes.CHAT} state={{ notice, publication }} onClick={handleChat} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-300 text-white">Chat</Link>)}
+                        <Link to={AppRoutes.COMMENTS} state={{ notice, publication }} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-300 text-white">Comment</Link>
                         {currentUser?.id === notice?.userId ? (
                             (publication.status !== "SOLD" && publication.status !== "RENTED") && (
-                                <Link to={AppRoutes.NOTICE} state={{ notice, publication }}>Edit</Link>
+                                <Link to={AppRoutes.NOTICE} state={{ notice, publication }} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-300 text-white">Edit</Link>
                             )
                         ) : (
                             <>
                                 {publication?.status === "SELLING" && (
-                                    <button onClick={handleBuy}>Buy</button>
+                                    <button onClick={handleBuy} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-500 text-white">Buy</button>
                                 )}
                                 {publication?.status === "RENTING" && (
-                                    <button onClick={handleRent}>Rent</button>
+                                    <button onClick={handleRent} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-500 text-white">Rent</button>
                                 )}
                             </>
                         )}

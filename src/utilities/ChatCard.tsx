@@ -60,7 +60,9 @@ const ChatCard: React.FC<ChatCardProps> =({ chat }) => {
     }, [notice]);
 
     return(
-        <h1>Chat with {user?.firstName} {user?.lastName} about {publication?.title}</h1>
+        <span className="flex border solid rounded-3xl m-2 p-3 text-2xl shadow-md">
+            Chat with {user?.firstName} {user?.lastName} about {publication?.title}
+        </span>
     );
 }
 

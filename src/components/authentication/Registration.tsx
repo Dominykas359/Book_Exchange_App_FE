@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AppRoutes } from "../../utilities/Routes";
 import { ErrorType } from "../../utilities/validations/ErrorType";
 import { validatePasswords } from "../../utilities/validations/PasswordValidation";
@@ -111,60 +111,65 @@ function Registration() {
 
     return (
         <div className="min-w-full min-h-full flex justify-center items-center">
-            <div>
-                <h1>Welcome to Booky</h1>
+            <div className="min-h-full flex flex-col justify-center items-center mt-15">
+                <div className="flex my-5">
+                    <img src="/book.png" className="w-8 h-8 hover:scale-110 transition-transform mx-4"></img>
+                    <h1 className="text-3xl">Welcome to Booky</h1>
+                    <img src="/book.png" className="w-8 h-8 hover:scale-110 transition-transform mx-4"></img>
+                </div>
+                
                 <form onSubmit={handleSubmit}>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email" className="text-lg">Email</label>
                     <br />
-                    <input type="email" name="email" value={credentials.email} onChange={handleInputChange} onBlur={handleCheckEmail} required className="border solid" />
+                    <input type="email" name="email" value={credentials.email} onChange={handleInputChange} onBlur={handleCheckEmail} required className="border solid rounded-lg my-1 p-1" />
                     {emailError.errorType === ErrorType.EmailRegistered && (
                         <>
                             <br />
-                            <span className="error-message">{emailError.message}</span>
+                            <span className="text-red-500">{emailError.message}</span>
                         </>
                     )}
                     <br />
-                    <label htmlFor="firstName">Firstname</label>
+                    <label htmlFor="firstName" className="text-lg">Firstname</label>
                     <br />
-                    <input type="text" name="firstName" value={credentials.firstName} onChange={handleInputChange} required className="border solid" />
+                    <input type="text" name="firstName" value={credentials.firstName} onChange={handleInputChange} required className="border solid rounded-lg my-1 p-1" />
                     <br />
-                    <label htmlFor="lastName">Lastname</label>
+                    <label htmlFor="lastName" className="text-lg">Lastname</label>
                     <br />
-                    <input type="text" name="lastName" value={credentials.lastName} onChange={handleInputChange} required className="border solid" />
+                    <input type="text" name="lastName" value={credentials.lastName} onChange={handleInputChange} required className="border solid rounded-lg my-1 p-1" />
                     <br />
-                    <label htmlFor="birthday">Birthday</label>
+                    <label htmlFor="birthday" className="text-lg">Birthday</label>
                     <br />
-                    <input type="date" name="birthday" value={credentials.birthday} onChange={handleInputChange} required className="border solid" />
+                    <input type="date" name="birthday" value={credentials.birthday} onChange={handleInputChange} required className="border solid rounded-lg my-1 p-1" />
                     <br />
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password" className="text-lg">Password</label>
                     <br />
-                    <input type="password" name="password" value={credentials.password} onChange={handlePasswordChange} required className="border solid" />
+                    <input type="password" name="password" value={credentials.password} onChange={handlePasswordChange} required className="border solid rounded-lg my-1 p-1" />
                     {error.errorType === ErrorType.TooWeakPassword && (
                         <>
                             <br />
-                            <span className="error-message">Password is too weak</span>
+                            <span className="text-red-500">Password is too weak</span>
                         </>
                     )}
                     <br />
-                    <label htmlFor="confirmPassword">Confirm Password</label>
+                    <label htmlFor="confirmPassword" className="text-lg">Confirm Password</label>
                     <br />
-                    <input type="password" name="confirmPassword" value={credentials.confirmPassword} onChange={handleConfirmPasswordChange} required className="border solid" />
+                    <input type="password" name="confirmPassword" value={credentials.confirmPassword} onChange={handleConfirmPasswordChange} required className="border solid rounded-lg my-1 p-1" />
                     {error.errorType === ErrorType.PasswordNotMatch && (
                         <>
                             <br />
-                            <span className="error-message">Passwords do not match</span>
+                            <span className="text-red-500">Passwords do not match</span>
                         </>
                     )}
-                    <div className="child">
-                        <button type="submit" className="border solid">
+                    <div className="min-w-full">
+                        <button type="submit" className="border solid text-lg px-3 py-1 rounded-3xl my-1 bg-blue-500 text-white">
                             Sign Up
                         </button>
                     </div>
                 </form>
-                <span>Already have an account? </span>
-                <a href={AppRoutes.LOG_IN} className="no-underline text-[hsl(272,76%,52%)]">
-                    Log in
-                </a>
+                <div className="flex">
+                    <span className="text-m">Already have an account?</span>
+                    <Link to={AppRoutes.LOG_IN} className="no-underline text-[hsl(272,76%,52%)] text-m">Log in</Link>
+                </div>
             </div>
         </div>
     );
