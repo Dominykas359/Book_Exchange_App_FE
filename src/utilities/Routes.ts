@@ -11,6 +11,7 @@ export const AppRoutes = {
     CHATS: '/chats',
     CHAT: '/chat',
     CHATPUBLISHER: '/chat-from-publisher',
+    USERS: '/users',
     ERROR_PAGE: '/error',
     COMMENTS: '/comments',
 

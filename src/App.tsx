@@ -13,6 +13,7 @@ import Chats from './components/main/Chats';
 import ErrorPage from './utilities/ErrorPage';
 import Comments from './components/main/Comments';
 import ChatFromPublisher from './components/main/ChatFromPublisher';
+import UsersComponent from './components/main/UsersComponent';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
         <Route path={AppRoutes.CHATPUBLISHER} element={<ChatFromPublisher />} />
         <Route path={AppRoutes.HISTORY} element={<History />} />
         <Route path={AppRoutes.SETTINGS} element={<Settings />} />
+        <Route path={AppRoutes.USERS} element={<UsersComponent />} />
         <Route path={AppRoutes.LOG_IN} element={<Login />} />
         <Route path={AppRoutes.SIGN_UP} element={<Registration />} />
         <Route path={AppRoutes.COMMENTS} element={<Comments />} />
