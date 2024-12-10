@@ -79,11 +79,11 @@ const HistoryCard: React.FC<HistoryCardProps> = ({ history }) => {
     }, [history]);
 
     return (
-        <div>
+        <div className="flex border solid rounded-3xl m-2 p-3 text-2xl shadow-md">
             {currentUser?.id === history.userId ? (
-                <p>{publication?.status === "RENTED" ? "Rented" : "Bought"} {publication?.title} from {otherUser?.firstName} {otherUser?.lastName}</p>
+                <p>{publication?.status === "RENTED" ? "Rented" : "Bought"} {publication?.title} from {otherUser?.firstName} {otherUser?.lastName} for {publication?.price}€</p>
             ) : (
-                <p>{publication?.status === "RENTED" ? "Rented" : "Sold"} {publication?.title} to {user?.firstName} {user?.lastName}</p>
+                <p>{publication?.status === "RENTED" ? "Rented" : "Sold"} {publication?.title} to {user?.firstName} {user?.lastName} for {publication?.price}€</p>
             )}
         </div>
     );

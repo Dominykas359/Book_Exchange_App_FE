@@ -141,13 +141,14 @@ function NewNotice() {
         <div className="flex h-full w-full items-center justify-center">
             <form className="flex flex-col" onSubmit={handleSubmit}>
                 <div>
-                    <span>Publication type</span>
+                    <span className="font-bold">Publication type: </span>
                     <select
                         id="publication"
                         name="publication"
                         value={publicationType}
                         onChange={handlePublicationChange}
                         required
+                        className="border solid rounded-lg mb-1 p-1"
                     >
                         <option value="">Select</option>
                         <option value="book">Book</option>
@@ -157,7 +158,7 @@ function NewNotice() {
                 </div>
 
                 <div>
-                    <span>Title</span>
+                    <span className="font-bold">Title: </span>
                     <input
                         type="text"
                         name="title"
@@ -165,10 +166,11 @@ function NewNotice() {
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
                         required
+                        className="border solid rounded-lg mb-1 p-1"
                     />
                 </div>
                 <div>
-                    <span>Author</span>
+                    <span className="font-bold">Author: </span>
                     <input
                         type="text"
                         name="author"
@@ -176,36 +178,40 @@ function NewNotice() {
                         value={author}
                         onChange={(e) => setAuthor(e.target.value)}
                         required
+                        className="border solid rounded-lg mb-1 p-1"
                     />
                 </div>
                 <div>
-                    <span>Release year</span>
+                    <span className="font-bold">Release year: </span>
                     <input
                         type="date"
                         name="year"
                         value={releaseYear}
                         onChange={(e) => setReleaseYear(e.target.value)}
                         required
+                        className="border solid rounded-lg mb-1 p-1"
                     />
                 </div>
                 <div>
-                    <span>Publisher</span>
+                    <span className="font-bold">Publisher: </span>
                     <input
                         type="text"
                         name="publisher"
                         value={publisher}
                         onChange={(e) => setPublisher(e.target.value)}
                         required
+                        className="border solid rounded-lg mb-1 p-1"
                     />
                 </div>
                 <div>
-                <label htmlFor="languages" className="flex flex-col">
-                                Language
+                <label htmlFor="languages" >
+                                <span className="font-bold">Language: </span>
                                 <select
                                     id="languages"
                                     name="languages"
                                     value={language}
                                     onChange={(e) => setLanguage(e.target.value)}
+                                    className="border solid rounded-lg mb-1 p-1"
                                 >
                                     <option value="">Select</option>
                                     <option value="english">English</option>
@@ -217,26 +223,28 @@ function NewNotice() {
                             </label>
                 </div>
                 <div>
-                    <span>Status</span>
+                    <span className="font-bold">Status: </span>
                     <select
                         id="status"
                         name="status"
                         value={status}
                         onChange={(e) => setStatus(e.target.value)}
                         required
+                        className="border solid rounded-lg mb-1 p-1"
                     >
                         <option value="RENTING">Renting</option>
                         <option value="SELLING">Selling</option>
                     </select>
                 </div>
                 <div>
-                    <span>Price</span>
+                    <span className="font-bold">Price: </span>
                     <input
                         type="number"
                         name="price"
                         value={price}
                         onChange={(e) => setPrice(Number(e.target.value))}
                         required
+                        className="border solid rounded-lg mb-1 p-1"
                     />
                 </div>
 
@@ -244,7 +252,7 @@ function NewNotice() {
                 {publicationType === "book" && (
                     <>
                         <div>
-                            <span>Page count</span>
+                            <span className="font-bold">Page count: </span>
                             <input
                                 type="number"
                                 name="page-count"
@@ -252,28 +260,31 @@ function NewNotice() {
                                 min={1}
                                 onChange={(e) => setPageCount(Number(e.target.value))}
                                 required
+                                className="border solid rounded-lg mb-1 p-1"
                             />
                         </div>
                         <div>
-                            <span>Cover</span>
+                            <span className="font-bold">Cover: </span>
                             <select
                                 id="cover"
                                 name="cover"
                                 value={cover}
                                 onChange={(e) => setCover(e.target.value)}
                                 required
+                                className="border solid rounded-lg mb-1 p-1"
                             >
                                 <option value="hard">Hard</option>
                                 <option value="soft">Soft</option>
                             </select>
                         </div>
                         <div>
-                            <span>Translator</span>
+                            <span className="font-bold">Translator: </span>
                             <input
                                 type="text"
                                 name="translator"
                                 value={translator}
                                 onChange={(e) => setTranslator(e.target.value)}
+                                className="border solid rounded-lg mb-1 p-1"
                             />
                         </div>
                     </>
@@ -283,7 +294,7 @@ function NewNotice() {
                 {publicationType === "comic" && (
                     <>
                         <div>
-                            <span>Page count</span>
+                            <span className="font-bold">Page count: </span>
                             <input
                                 type="number"
                                 name="page-count"
@@ -291,16 +302,18 @@ function NewNotice() {
                                 min={1}
                                 onChange={(e) => setPageCount(Number(e.target.value))}
                                 required
+                                className="border solid rounded-lg mb-1 p-1"
                             />
                         </div>
                         <div>
-                            <span>Colored</span>
+                            <span className="font-bold">Colored: </span>
                             <select
                                 id="colored"
                                 name="colored"
                                 value={colored}
                                 onChange={(e) => setColored(e.target.value)}
                                 required
+                                className="border solid rounded-lg mb-1 p-1"
                             >
                                 <option value="true">Yes</option>
                                 <option value="false">No</option>
@@ -313,7 +326,7 @@ function NewNotice() {
                 {publicationType === "periodical" && (
                     <>
                         <div>
-                            <span>Number</span>
+                            <span className="font-bold">Number: </span>
                             <input
                                 type="number"
                                 name="number"
@@ -321,13 +334,14 @@ function NewNotice() {
                                 onChange={(e) => setNumber(Number(e.target.value))}
                                 min={1}
                                 required
+                                className="border solid rounded-lg mb-1 p-1"
                             />
                         </div>
                     </>
                 )}
                 <div className="flex">
-                    <Link to={AppRoutes.NOTICES}>Cancel</Link>
-                    <button type="submit">Submit</button>
+                    <Link to={AppRoutes.NOTICES} className="border solid text-m px-3 py-1 rounded-3xl mx-1 bg-blue-300 text-white">Cancel</Link>
+                    <button type="submit" className="border solid text-m px-3 py-1 rounded-3xl mx-1 bg-blue-500 text-white">Post</button>
                 </div>
             </form>
         </div>

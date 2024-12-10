@@ -56,16 +56,16 @@ const ManageComment: React.FC<ManageCommentProps> = ({ onPost, onCancel, noticeI
                 />
                 <div className="flex justify-end space-x-2 mt-4">
                     <button
-                        onClick={handleSubmit}
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                    >
-                        Update
-                    </button>
-                    <button
                         onClick={onCancel}
                         className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
                     >
                         Cancel
+                    </button>
+                    <button
+                        onClick={handleSubmit}
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                        Post
                     </button>
                 </div>
             </div>

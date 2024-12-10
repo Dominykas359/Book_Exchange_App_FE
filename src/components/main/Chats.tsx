@@ -37,6 +37,7 @@ function Chats() {
     return (
         <div>
             <Header />
+            <h1 className="text-4xl ml-4">Chats</h1>
             {chats?.map((chat) => (
                 <div key={chat.id}>
                     <Link to={AppRoutes.CHATPUBLISHER} state={{ chat }}>

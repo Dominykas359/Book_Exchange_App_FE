@@ -46,25 +46,31 @@ function Login(){
 
     return(
         <div className="min-w-full min-h-full flex justify-center items-center">
-            <div className="flex flex-col">
-                <h1>Welcome to booky</h1>
+            <div className="min-h-full flex flex-col justify-center items-center mt-20">
+                <div className="flex my-5">
+                    <img src="/book.png" className="w-8 h-8 hover:scale-110 transition-transform mx-4"></img>
+                    <h1 className="text-3xl">Welcome to Booky</h1>
+                    <img src="/book.png" className="w-8 h-8 hover:scale-110 transition-transform mx-4"></img>
+                </div>
                 <form onSubmit={handleSubmit}>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="email" className="text-lg">Email</label>
                     <br></br>
-                    <input type="email" name="email" value={credentials.email} onChange={handleInputChange} className="border solid"></input>
+                    <input type="email" name="email" value={credentials.email} onChange={handleInputChange} className="border solid rounded-lg my-1 p-1"></input>
                     <br></br>
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password" className="text-lg">Password</label>
                     <br></br>
-                    <input type="password" name="password" value={credentials.password} onChange={handleInputChange} className="border solid"></input>
+                    <input type="password" name="password" value={credentials.password} onChange={handleInputChange} className="border solid rounded-lg my-1 p-1"></input>
                     <div className="child">
-                        <button className="authentication-button" type="submit">Login</button>
+                        <button className="border solid text-lg px-3 py-1 rounded-3xl my-1 bg-blue-500 text-white" type="submit">Login</button>
                     </div>
                 </form>
                 {error && (
-                            <span className="error-message">{error}</span>
+                            <span className="text-red-500">{error}</span>
                         )}
-                <span>Don't have an accout yet?</span>
-                <Link to={AppRoutes.SIGN_UP} className="no-underline text-[hsl(272,76%,52%)]">Sign up</Link>
+                <div className="flex">
+                    <span className="text-m">Don't have an accout yet?</span>
+                    <Link to={AppRoutes.SIGN_UP} className="no-underline text-[hsl(272,76%,52%)] text-m">Sign up</Link>
+                </div>
             </div>
         </div>
     );
