@@ -10,6 +10,13 @@ export const createComic = async (comic: Comic): Promise<Comic> => {
     return response.data;
 }
 
+export const getComics = async (): Promise<Comic[]> => {
+
+    const response = await axios.get<Comic[]>(`${url}`);
+
+    return response.data;
+}
+
 export const findComicById = async (id: string): Promise<Comic> => {
 
     const response = await axios.get<Comic>(`${url}/${id}`);

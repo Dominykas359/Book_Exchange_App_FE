@@ -10,6 +10,13 @@ export const createBook = async (book: Book): Promise<Book> => {
     return response.data;
 }
 
+export const getBooks = async (): Promise<Book[]> => {
+
+    const response = await axios.get<Book[]>(`${url}`);
+
+    return response.data;
+}
+
 export const findBookById = async (id: string): Promise<Book> => {
 
     const response = await axios.get<Book>(`${url}/${id}`);
