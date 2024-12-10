@@ -199,14 +199,22 @@ function NewNotice() {
                     />
                 </div>
                 <div>
-                    <span>Language</span>
-                    <input
-                        type="text"
-                        name="language"
-                        value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
-                        required
-                    />
+                <label htmlFor="languages" className="flex flex-col">
+                                Language
+                                <select
+                                    id="languages"
+                                    name="languages"
+                                    value={language}
+                                    onChange={(e) => setLanguage(e.target.value)}
+                                >
+                                    <option value="">Select</option>
+                                    <option value="english">English</option>
+                                    <option value="lithuanian">Lithuanian</option>
+                                    <option value="german">German</option>
+                                    <option value="russian">Russian</option>
+                                    <option value="spanish">Spanish</option>
+                                </select>
+                            </label>
                 </div>
                 <div>
                     <span>Status</span>

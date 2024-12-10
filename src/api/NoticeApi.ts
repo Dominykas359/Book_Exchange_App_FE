@@ -11,11 +11,10 @@ export const createNotice = async (notice: Notice): Promise<Notice> => {
 }
 
 export const getAllNotices = async (): Promise<Notice[]> => {
-
     const response = await axios.get<Notice[]>(`${url}`);
 
     return response.data;
-}
+};
 
 export const fetchNoticeById = async (id: string): Promise<Notice> => {
 

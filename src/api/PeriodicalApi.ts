@@ -10,6 +10,13 @@ export const createPeriodacal = async (periodical: Periodical): Promise<Periodic
     return response.data;
 }
 
+export const getPeriodicals = async (): Promise<Periodical[]> => {
+
+    const response = await axios.get<Periodical[]>(`${url}`);
+
+    return response.data;
+}
+
 export const findPeriodicalById = async (id: string): Promise<Periodical> => {
 
     const response = await axios.get<Periodical>(`${url}/${id}`);
