@@ -71,7 +71,7 @@ const SingleComment: React.FC<CommentProps> = ({ comment }) => {
             <small>By: {user?.firstName} {user?.lastName} on {new Date(comment.timeSent).toLocaleString()}</small>
             <div>
                 <button onClick={handleCreateCommentModal} className="border solid text-m px-3 py-1 rounded-3xl my-1 bg-blue-500 text-white">Reply</button>
-                {currentUser?.id === comment.userId && (
+                {(currentUser?.id === comment.userId || currentUser?.role === "ADMIN") && (
                     <>
                         <button onClick={() => handleEditComment(comment)} className="border solid text-m px-3 py-1 rounded-3xl my-1 bg-blue-300 text-white">Edit</button>
                         <button onClick={() => handleDelete(comment.id)} className="border solid text-m px-3 py-1 rounded-3xl my-1 bg-blue-300 text-white">Delete</button>
