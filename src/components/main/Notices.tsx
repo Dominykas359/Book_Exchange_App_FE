@@ -385,15 +385,16 @@ function Notices() {
                 </div>
             </div>
             <div>
-                {
-                    !isAIVisible && (
-                        <button className="fixed bottom-8 right-8 bg-blue-500 text-white px-2 py-2 rounded-full shadow-lg"
-                            onClick={() => setIsAIVisible(true)}>
-                                AI Assistant
-                        </button>
-                    )
-                }
-                {isAIVisible && <AIField />}
+                {!isAIVisible && (
+                    <button 
+                        className="fixed bottom-8 right-8 bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg"
+                        onClick={() => setIsAIVisible(true)}
+                    >
+                        AI Assistant
+                    </button>
+                )}
+
+                {isAIVisible && <AIField onClose={() => setIsAIVisible(false)} />}
             </div>
         </>
     );
