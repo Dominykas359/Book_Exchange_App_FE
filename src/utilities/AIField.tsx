@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { chat } from "../api/GptApi";
 
 type AIFieldProps = {
     onClose: () => void;
@@ -9,6 +10,7 @@ function AIField({ onClose }: AIFieldProps) {
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [toxicityScore, setToxicityScore] = useState<number | null>(null);
+    const [aiResponse, setAiResponse] = useState<string>(''); // Ensure this is a string
     
     const API_KEY = "AIzaSyD_b7U6B39Zil88IuVPuwm5ygHaFZxFVEQ";
 
@@ -24,7 +26,8 @@ function AIField({ onClose }: AIFieldProps) {
         setLoading(true);
         
         try {
-            const response = await fetch(
+            // Analyze toxicity
+            const toxicityResponse = await fetch(
                 `https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze?key=${API_KEY}`,
                 {
                     method: "POST",
@@ -38,15 +41,27 @@ function AIField({ onClose }: AIFieldProps) {
                     }),
                 }
             );
+            const toxicityData = await toxicityResponse.json();
+            const toxicityScore = toxicityData.attributeScores?.TOXICITY?.summaryScore?.value || 0;
 
-            const data = await response.json();
-            const score = data.attributeScores?.TOXICITY?.summaryScore?.value || 0;
+            setToxicityScore(toxicityScore);
 
-            setToxicityScore(score);
+            if (toxicityScore > 0.7) {
+                // If the toxicity score is high, don't proceed with the GPT API call
+                alert("High toxicity detected. Please modify your message.");
+                return;
+            }
+
+            // Call GPT API if toxicity is acceptable
+            const chatResponse = await chat(input);
+            
+            // Ensure that chatResponse is a string
+            setAiResponse(String(chatResponse)); // Convert to string if necessary
         } catch (error) {
-            console.error("Error analyzing text:", error);
+            console.error("Error processing the request:", error);
         } finally {
             setLoading(false);
+            setInput('');
         }
     };
 
@@ -63,6 +78,13 @@ function AIField({ onClose }: AIFieldProps) {
             </div>
 
             <p className="mb-4">How can I help you today?</p>
+
+            {aiResponse && (
+                <div className="mt-4 p-4 bg-gray-100 border rounded-lg">
+                    <h3 className="text-lg font-semibold">AI Response:</h3>
+                    <p>{aiResponse}</p>
+                </div>
+            )}
 
             <div className="mt-auto">
                 <textarea
@@ -82,14 +104,6 @@ function AIField({ onClose }: AIFieldProps) {
                 >
                     {loading ? "Analyzing..." : "Send"}
                 </button>
-
-                {toxicityScore !== null && (
-                    <p className={`mt-2 text-sm font-bold ${toxicityScore > 0.7 ? "text-red-600" : "text-green-600"}`}>
-                        {toxicityScore > 0.7
-                            ? `⚠️ High toxicity detected! (Score: ${toxicityScore.toFixed(2)})`
-                            : `✅ Safe message (Score: ${toxicityScore.toFixed(2)})`}
-                    </p>
-                )}
             </div>
         </div>
     );
