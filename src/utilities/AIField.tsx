@@ -12,7 +12,7 @@ function AIField({ onClose }: AIFieldProps) {
     const [toxicityScore, setToxicityScore] = useState<number | null>(null);
     const [aiResponse, setAiResponse] = useState<string>(''); // Ensure this is a string
     
-    const API_KEY = import.meta.env.API_KEY;
+    const API_KEY = import.meta.env.VITE_PERSPECTIVE_API;
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (e.target.value.length <= MAX_CHAR_LIMIT) {
