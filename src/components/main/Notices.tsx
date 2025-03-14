@@ -12,6 +12,7 @@ import { User } from "../../models/User";
 import { getBooks } from "../../api/BookApi";
 import { getComics } from "../../api/ComicApi";
 import { getPeriodicals } from "../../api/PeriodicalApi";
+import AIField from "../../utilities/AIField";
 
 function Notices() {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -33,6 +34,7 @@ function Notices() {
     const [language, setLanguage] = useState<string>('');
     const [status, setStatus] = useState<string>('');
     const [cover, setCover] = useState<string>('');
+    const [isAIVisible, setIsAIVisible] = useState(false);
 
     useEffect(() => {
         const initializeUser = () => {
@@ -381,6 +383,17 @@ function Notices() {
                         <p>Loading...</p>
                     )}
                 </div>
+            </div>
+            <div>
+                {
+                    !isAIVisible && (
+                        <button className="fixed bottom-8 right-8 bg-blue-500 text-white px-2 py-2 rounded-full shadow-lg"
+                            onClick={() => setIsAIVisible(true)}>
+                                AI Assistant
+                        </button>
+                    )
+                }
+                {isAIVisible && <AIField />}
             </div>
         </>
     );
