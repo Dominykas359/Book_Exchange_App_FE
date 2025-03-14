@@ -12,7 +12,7 @@ function AIField({ onClose }: AIFieldProps) {
     const [toxicityScore, setToxicityScore] = useState<number | null>(null);
     const [aiResponse, setAiResponse] = useState<string>(''); // Ensure this is a string
     
-    const API_KEY = "AIzaSyD_b7U6B39Zil88IuVPuwm5ygHaFZxFVEQ";
+    const API_KEY = import.meta.env.API_KEY;
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         if (e.target.value.length <= MAX_CHAR_LIMIT) {
