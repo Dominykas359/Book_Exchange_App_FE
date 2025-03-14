@@ -39,6 +39,12 @@ function AIField({ onClose }: AIFieldProps) {
                 <div className="text-right text-gray-500 text-sm mt-1">
                     {input.length} / {MAX_CHAR_LIMIT} characters
                 </div>
+                <button
+                    className="mt-2 w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+                    disabled={input.length === 0}
+                >
+                    Send
+                </button>
             </div>
         </div>
     );
