@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { chat } from "../api/GptApi";
+import { Notice } from "../models/Notice";
+import NoticeCard from "./NoticeCard"; // Import NoticeCard
 
 type AIFieldProps = {
     onClose: () => void;
@@ -10,7 +12,7 @@ function AIField({ onClose }: AIFieldProps) {
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [toxicityScore, setToxicityScore] = useState<number | null>(null);
-    const [aiResponse, setAiResponse] = useState<string>(''); // Ensure this is a string
+    const [notices, setNotices] = useState<Notice[]>([]); // Store notices instead of string response
     
     const API_KEY = import.meta.env.VITE_PERSPECTIVE_API;
 
@@ -47,7 +49,6 @@ function AIField({ onClose }: AIFieldProps) {
             setToxicityScore(toxicityScore);
 
             if (toxicityScore > 0.7) {
-                // If the toxicity score is high, don't proceed with the GPT API call
                 alert("High toxicity detected. Please modify your message.");
                 return;
             }
@@ -55,8 +56,7 @@ function AIField({ onClose }: AIFieldProps) {
             // Call GPT API if toxicity is acceptable
             const chatResponse = await chat(input);
             
-            // Ensure that chatResponse is a string
-            setAiResponse(String(chatResponse)); // Convert to string if necessary
+            setNotices(chatResponse); // Store the notices directly
         } catch (error) {
             console.error("Error processing the request:", error);
         } finally {
@@ -79,11 +79,19 @@ function AIField({ onClose }: AIFieldProps) {
 
             <p className="mb-4">How can I help you today?</p>
 
-            {aiResponse && (
-                <div className="mt-4 p-4 bg-gray-100 border rounded-lg">
-                    <h3 className="text-lg font-semibold">AI Response:</h3>
-                    <p>{aiResponse}</p>
+            {/* Display AI-generated Notices */}
+            {notices.length > 0 && (
+                <div className="mt-4 p-4 bg-gray-100 border rounded-lg max-h-64 overflow-y-auto">
+                    <h3 className="text-lg font-semibold">AI Generated Notices:</h3>
+                    {notices.map((notice) => (
+                        <NoticeCard key={notice.id} notice={notice} />
+                    ))}
                 </div>
+            )}
+
+            {/* If no publications are found*/}
+            {notices.length === 0 && !loading && (
+                <p className="text-gray-500 text-sm">No related notices found.</p>
             )}
 
             <div className="mt-auto">
