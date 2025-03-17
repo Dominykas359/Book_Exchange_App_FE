@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { chat } from "../api/GptApi";
+import { Notice } from "../models/Notice";
+import NoticeCard from "../utilities/NoticeCard"
 
 type AIFieldProps = {
     onClose: () => void;
@@ -10,8 +12,8 @@ function AIField({ onClose }: AIFieldProps) {
     const [input, setInput] = useState("");
     const [loading, setLoading] = useState(false);
     const [toxicityScore, setToxicityScore] = useState<number | null>(null);
-    const [aiResponse, setAiResponse] = useState<string>(''); // Ensure this is a string
-    
+    const [notices, setNotices] = useState<Notice[]>([]);
+
     const API_KEY = import.meta.env.VITE_PERSPECTIVE_API;
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -56,7 +58,7 @@ function AIField({ onClose }: AIFieldProps) {
             const chatResponse = await chat(input);
             
             // Ensure that chatResponse is a string
-            setAiResponse(String(chatResponse)); // Convert to string if necessary
+            setNotices(chatResponse); // Store the notices directly
         } catch (error) {
             console.error("Error processing the request:", error);
         } finally {
@@ -79,10 +81,12 @@ function AIField({ onClose }: AIFieldProps) {
 
             <p className="mb-4">How can I help you today?</p>
 
-            {aiResponse && (
+            {notices.length > 0 && (
                 <div className="mt-4 p-4 bg-gray-100 border rounded-lg">
-                    <h3 className="text-lg font-semibold">AI Response:</h3>
-                    <p>{aiResponse}</p>
+                    <h3 className="text-lg font-semibold">AI Generated Notices:</h3>
+                    {notices.map((notice) => (
+                        <NoticeCard key={notice.id} notice={notice} />
+                    ))}
                 </div>
             )}
 
