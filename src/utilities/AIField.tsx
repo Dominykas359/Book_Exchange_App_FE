@@ -90,6 +90,10 @@ function AIField({ onClose }: AIFieldProps) {
                 </div>
             )}
 
+            {notices.length === 0 && !loading && (
+                <p className="text-gray-500 text-sm"> No related notices found.</p>
+            )}
+
             <div className="mt-auto">
                 <textarea
                     className="w-full border border-gray-300 rounded-lg p-2 resize-none"
