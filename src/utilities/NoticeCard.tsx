@@ -122,6 +122,17 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
         }
     };
 
+    const handleCancelRent = async () => {
+        if (!publication) return;
+
+        const updatedPublication = { ...publication, status: "RENTING" };
+
+        if (notice.bookId) await updateBook(publication.id, updatedPublication);
+        else if (notice.comicId) await updateComic(publication.id, updatedPublication);
+        else if (notice.periodicalId) await updatePeriodical(publication.id, updatedPublication);
+
+    };
+
     return (
         <div className="border p-3 rounded-lg shadow-md bg-white my-1" style={{ height: '280px', overflow: 'hidden' }}>
             {publication ? (
@@ -157,6 +168,11 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
                                 {(publication?.status === "RENTING" && currentUser?.role !== "ADMIN") && (
                                     <button onClick={handleRent} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-500 text-white">Rent</button>
                                 )}
+                                <button
+                                    type="button"
+                                    className="border solid text-m px-3 py-1 rounded-3xl mx-1 bg-red-500 text-white" onClick={handleCancelRent}>Cancel Rent
+                                </button>
+
                             </>
                         )}
                     </div>
