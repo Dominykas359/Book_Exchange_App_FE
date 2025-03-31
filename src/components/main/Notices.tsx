@@ -371,7 +371,7 @@ function Notices() {
                     </div>
                 </div>
                 <div>
-                    {filteredNotices ? (
+                    {Array.isArray(filteredNotices) ? (
                         <div className="grid grid-cols-4 gap-2">
                             {filteredNotices.map((notice) => (
                                 <div key={notice.id}>
