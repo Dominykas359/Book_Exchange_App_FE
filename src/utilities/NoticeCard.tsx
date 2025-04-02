@@ -74,9 +74,13 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
 
     useEffect(() => {
         const fetchWishlistStatus = async () => {
-            if (currentUser && publication) {
-                const inWishlist = await checkIfInWishlist(currentUser.id, publication.id);
-                setIsInWishlist(inWishlist);
+            try {
+                if (currentUser && publication) {
+                    const inWishlist = await checkIfInWishlist(currentUser.id, publication.id);
+                    setIsInWishlist(inWishlist);
+                }
+            }catch(error){
+                console.error("error fetching wishlist status");
             }
         }
         fetchWishlistStatus();

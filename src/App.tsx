@@ -14,6 +14,7 @@ import ErrorPage from './utilities/ErrorPage';
 import Comments from './components/main/Comments';
 import ChatFromPublisher from './components/main/ChatFromPublisher';
 import UsersComponent from './components/main/UsersComponent';
+import Wishlist from './components/main/Wishlist';
 
 function App() {
 
@@ -33,6 +34,8 @@ function App() {
         <Route path={AppRoutes.LOG_IN} element={<Login />} />
         <Route path={AppRoutes.SIGN_UP} element={<Registration />} />
         <Route path={AppRoutes.COMMENTS} element={<Comments />} />
+        <Route path={AppRoutes.WISHLIST} element={<Wishlist />} />
+
         <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
