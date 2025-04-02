@@ -11,6 +11,7 @@ import { createHistory } from "../api/HistoryApi";
 import { HistoryEntry } from "../models/HistoryEntry";
 import { createChat, fetchChatByNoticeId } from "../api/ChatApi";
 import { ChatEntry } from "../models/ChatEntry";
+import { checkIfInWishlist, addToWishlist, removeFromWishlist } from "../api/WishListItemApi";
 
 interface NoticeCardProps {
     notice: Notice;
@@ -20,6 +21,7 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
     const [publication, setPublication] = useState<any | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [isInWishlist, setIsInWishlist] = useState(false);
 
     useEffect(() => {
         const initializeUser = async () => {
@@ -35,12 +37,12 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
 
     useEffect(() => {
         const fetchUser = async (notice: Notice) => {
-            try{
-                if(notice.userId){
+            try {
+                if (notice.userId) {
                     const user = await fetchUserById(notice.userId);
                     setUser(user);
                 }
-            } catch(error){
+            } catch (error) {
                 console.error("Error fetching user", error);
             }
         }
@@ -67,7 +69,18 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
         }
 
         fetchPublicationForNotice(notice);
-    }, [notice, publication]);
+    }, [notice]);
+
+
+    useEffect(() => {
+        const fetchWishlistStatus = async () => {
+            if (currentUser && publication) {
+                const inWishlist = await checkIfInWishlist(currentUser.id, publication.id);
+                setIsInWishlist(inWishlist);
+            }
+        }
+        fetchWishlistStatus();
+    }, [currentUser, publication]);
 
     const handleBuy = async () => {
         if (!publication) return;
@@ -130,11 +143,23 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
         if (notice.bookId) await updateBook(publication.id, updatedPublication);
         else if (notice.comicId) await updateComic(publication.id, updatedPublication);
         else if (notice.periodicalId) await updatePeriodical(publication.id, updatedPublication);
+    };
+    const handleAddToWishlist = async () => {
+        if (!currentUser || !publication) return;
 
+        await addToWishlist(currentUser.id, publication.id);
+        setIsInWishlist(true);
+    };
+
+    const handleRemoveFromWishlist = async () => {
+        if (!currentUser || !publication) return;
+
+        await removeFromWishlist(currentUser.id, publication.id);
+        setIsInWishlist(false);
     };
 
     return (
-        <div className="border p-3 rounded-lg shadow-md bg-white my-1" style={{ height: '280px', overflow: 'hidden' }}>
+        <div className="border p-3 rounded-lg shadow-md bg-white my-1" style={{ height: '280px', overflow: 'auto' }}>
             {publication ? (
                 <>
                     <h2 className="text-xl font-bold">{publication.title}</h2>
@@ -168,10 +193,33 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
                                 {(publication?.status === "RENTING" && currentUser?.role !== "ADMIN") && (
                                     <button onClick={handleRent} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-500 text-white">Rent</button>
                                 )}
-                                <button
-                                    type="button"
-                                    className="border solid text-m px-3 py-1 rounded-3xl mx-1 bg-red-500 text-white" onClick={handleCancelRent}>Cancel Rent
-                                </button>
+                                {publication && (
+                                    <div className="flex space-x-2">
+
+                                        {currentUser?.id !== notice.userId && currentUser?.role !== "ADMIN" && (
+                                            isInWishlist ? (
+                                                <button onClick={handleRemoveFromWishlist} className="bg-red-500 text-white px-3 py-1 rounded">
+                                                    Remove from Wishlist
+                                                </button>
+                                            ) : (
+                                                <button onClick={handleAddToWishlist} className="bg-green-500 text-white px-3 py-1 rounded">
+                                                    Add to Wishlist
+                                                </button>
+                                            )
+                                        )}
+                                        {publication?.status === "RENTED" && (
+                                            <button
+                                                type="button"
+                                                className="border solid text-m px-3 py-1 rounded-3xl mx-1 bg-red-500 text-white"
+                                                onClick={handleCancelRent}
+                                            >
+                                                Cancel Rent
+                                            </button>
+                                        )}
+
+                                    </div>
+                                )}
+
 
                             </>
                         )}
