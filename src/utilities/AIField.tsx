@@ -82,8 +82,8 @@ function AIField({ onClose }: AIFieldProps) {
             <p className="mb-4">How can I help you today?</p>
 
             {notices.length > 0 && (
-                <div className="mt-4 p-4 bg-gray-100 border rounded-lg">
-                    <h3 className="text-lg font-semibold">AI Generated Notices:</h3>
+                <div className="mt-4 p-4 bg-gray-100 border rounded-lg max-h-[300px] overflow-y-auto">
+                    <h3 className="text-lg font-semibold mb-2">AI Generated Notices:</h3>
                     {notices.map((notice) => (
                         <NoticeCard key={notice.id} notice={notice} />
                     ))}
