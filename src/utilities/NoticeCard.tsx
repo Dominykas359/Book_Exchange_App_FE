@@ -74,17 +74,18 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
 
     useEffect(() => {
         const fetchWishlistStatus = async () => {
+            
             try {
-                if (currentUser && publication) {
-                    const inWishlist = await checkIfInWishlist(currentUser.id, publication.id);
+                if (currentUser && notice) {
+                    const inWishlist = await checkIfInWishlist(currentUser.id, notice.id);
                     setIsInWishlist(inWishlist);
                 }
-            }catch(error){
-                console.error("error fetching wishlist status");
+            } catch (error) {
+                console.error("error fetching wishlist status",error);
             }
         }
         fetchWishlistStatus();
-    }, [currentUser, publication]);
+    }, [currentUser, notice]);
 
     const handleBuy = async () => {
         if (!publication) return;
@@ -149,17 +150,28 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
         else if (notice.periodicalId) await updatePeriodical(publication.id, updatedPublication);
     };
     const handleAddToWishlist = async () => {
-        if (!currentUser || !publication) return;
-
-        await addToWishlist(currentUser.id, publication.id);
-        setIsInWishlist(true);
+        if (!currentUser || !notice) {
+            console.error("Missing user or notice");
+            return;
+        }    
+        try {
+            console.log("Adding to wishlist:", currentUser.id, notice.id);
+            await addToWishlist(currentUser.id, notice.id);
+            setIsInWishlist(true);
+        } catch (error) {
+            console.error("Error adding to wishlist", error);
+        }
     };
+    
 
     const handleRemoveFromWishlist = async () => {
-        if (!currentUser || !publication) return;
-
-        await removeFromWishlist(currentUser.id, publication.id);
-        setIsInWishlist(false);
+        try {
+            if (!currentUser || !notice) return;
+            await removeFromWishlist(currentUser.id, notice.id);
+            setIsInWishlist(false);
+        } catch (error) {
+            console.error("error removing from wishlist");
+        }
     };
 
     return (
