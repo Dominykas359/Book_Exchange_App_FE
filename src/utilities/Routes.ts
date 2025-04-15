@@ -14,6 +14,7 @@ export const AppRoutes = {
     USERS: '/users',
     ERROR_PAGE: '/error',
     COMMENTS: '/comments',
+    WISHLIST: '/wishlist',
 
     ROOT: '/'
 } as const;
