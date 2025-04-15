@@ -1,5 +1,5 @@
 export interface WishListItem {
     id: string;
-    userId: string;
-    noticeId: string;
+    user_id: string;
+    notice_id: string;
 }
