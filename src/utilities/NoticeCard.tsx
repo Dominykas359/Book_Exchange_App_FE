@@ -11,6 +11,7 @@ import { createHistory } from "../api/HistoryApi";
 import { HistoryEntry } from "../models/HistoryEntry";
 import { createChat, fetchChatByNoticeId } from "../api/ChatApi";
 import { ChatEntry } from "../models/ChatEntry";
+import { addToWishlist, fetchWishlistByUserId, removeFromWishlist } from "../api/WishListItemApi";
 
 interface NoticeCardProps {
     notice: Notice;
@@ -20,6 +21,8 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
     const [publication, setPublication] = useState<any | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [isInWishlist, setIsInWishlist] = useState(false);
+    const [wishlistItemId, setWishlistItemId] = useState<string | null>(null);
 
     useEffect(() => {
         const initializeUser = async () => {
@@ -27,23 +30,34 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
             if (userData) {
                 const data = JSON.parse(userData);
                 setCurrentUser(data);
+
+                try {
+                    const wishlist = await fetchWishlistByUserId(data.id);
+                    const match = wishlist.find(item => item.notice_id === notice.id);
+                    if (match) {
+                        setWishlistItemId(match.id);
+                        setIsInWishlist(true);
+                    }
+                } catch (error) {
+                    console.error("Failed to fetch wishlist", error);
+                }
             }
         };
 
         initializeUser();
-    }, []);
+    }, [notice.id]);
 
     useEffect(() => {
         const fetchUser = async (notice: Notice) => {
-            try{
-                if(notice.userId){
+            try {
+                if (notice.userId) {
                     const user = await fetchUserById(notice.userId);
                     setUser(user);
                 }
-            } catch(error){
+            } catch (error) {
                 console.error("Error fetching user", error);
             }
-        }
+        };
 
         fetchUser(notice);
     }, []);
@@ -64,10 +78,10 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
             } catch (error) {
                 console.error("Error fetching publication:", error);
             }
-        }
+        };
 
         fetchPublicationForNotice(notice);
-    }, [notice, publication]);
+    }, [notice]);
 
     const handleBuy = async () => {
         if (!publication) return;
@@ -130,11 +144,39 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
         if (notice.bookId) await updateBook(publication.id, updatedPublication);
         else if (notice.comicId) await updateComic(publication.id, updatedPublication);
         else if (notice.periodicalId) await updatePeriodical(publication.id, updatedPublication);
+    };
 
+    const handleAddToWishlist = async () => {
+        if (!currentUser || !notice) return;
+
+        try {
+            const wishlistItem = {
+                id: '',
+                user_id: currentUser.id,
+                notice_id: notice.id
+            };
+            const createdItem = await addToWishlist(wishlistItem);
+            setWishlistItemId(createdItem.id);
+            setIsInWishlist(true);
+        } catch (error) {
+            console.error("Error adding to wishlist", error);
+        }
+    };
+
+    const handleRemoveFromWishlist = async () => {
+        if (!wishlistItemId) return;
+
+        try {
+            await removeFromWishlist(wishlistItemId);
+            setWishlistItemId(null);
+            setIsInWishlist(false);
+        } catch (error) {
+            console.error("Error removing from wishlist", error);
+        }
     };
 
     return (
-        <div className="border p-3 rounded-lg shadow-md bg-white my-1" style={{ height: '280px', overflow: 'hidden' }}>
+        <div className="border p-3 rounded-lg shadow-md bg-white my-1" style={{ height: '280px', overflow: 'auto' }}>
             {publication ? (
                 <>
                     <h2 className="text-xl font-bold">{publication.title}</h2>
@@ -154,25 +196,56 @@ const NoticeCard: React.FC<NoticeCardProps> = ({ notice }) => {
                     <p>Status: {publication.status}</p>
                     <p>Posted by {user?.firstName} {user?.lastName}</p>
                     <div>
-                        {currentUser?.id !== notice.userId && (<Link to={AppRoutes.CHAT} state={{ notice, publication }} onClick={handleChat} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-300 text-white">Chat</Link>)}
-                        <Link to={AppRoutes.COMMENTS} state={{ notice, publication }} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-300 text-white">Comment</Link>
+                        {currentUser?.id !== notice.userId && (
+                            <Link to={AppRoutes.CHAT} state={{ notice, publication }} onClick={handleChat} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-300 text-white">
+                                Chat
+                            </Link>
+                        )}
+                        <Link to={AppRoutes.COMMENTS} state={{ notice, publication }} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-300 text-white">
+                            Comment
+                        </Link>
                         {currentUser?.id === notice?.userId || currentUser?.role === "ADMIN" ? (
                             ((publication.status !== "SOLD" && publication.status !== "RENTED")) && (
-                                <Link to={AppRoutes.NOTICE} state={{ notice, publication }} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-300 text-white">Edit</Link>
+                                <Link to={AppRoutes.NOTICE} state={{ notice, publication }} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-300 text-white">
+                                    Edit
+                                </Link>
                             )
                         ) : (
                             <>
                                 {(publication?.status === "SELLING" && currentUser?.role !== "ADMIN") && (
-                                    <button onClick={handleBuy} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-500 text-white">Buy</button>
+                                    <button onClick={handleBuy} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-500 text-white">
+                                        Buy
+                                    </button>
                                 )}
                                 {(publication?.status === "RENTING" && currentUser?.role !== "ADMIN") && (
-                                    <button onClick={handleRent} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-500 text-white">Rent</button>
+                                    <button onClick={handleRent} className="border solid text-sm px-3 py-1 rounded-3xl m-1 bg-blue-500 text-white">
+                                        Rent
+                                    </button>
                                 )}
-                                <button
-                                    type="button"
-                                    className="border solid text-m px-3 py-1 rounded-3xl mx-1 bg-red-500 text-white" onClick={handleCancelRent}>Cancel Rent
-                                </button>
-
+                                {publication && (
+                                    <div className="flex space-x-2">
+                                        {currentUser?.id !== notice.userId && currentUser?.role !== "ADMIN" && (
+                                            isInWishlist ? (
+                                                <button onClick={handleRemoveFromWishlist} className="bg-red-500 text-white px-3 py-1 rounded">
+                                                    Remove from Wishlist
+                                                </button>
+                                            ) : (
+                                                <button onClick={handleAddToWishlist} className="bg-green-500 text-white px-3 py-1 rounded">
+                                                    Add to Wishlist
+                                                </button>
+                                            )
+                                        )}
+                                        {publication?.status === "RENTED" && (
+                                            <button
+                                                type="button"
+                                                className="border solid text-m px-3 py-1 rounded-3xl mx-1 bg-red-500 text-white"
+                                                onClick={handleCancelRent}
+                                            >
+                                                Cancel Rent
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </>
                         )}
                     </div>
